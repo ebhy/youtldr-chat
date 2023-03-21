@@ -39,6 +39,10 @@ async def websocket_endpoint(
     logging.info("Building Vectorstore...")
     # First message is websocket
     text = await websocket.receive_text()
+    resp = ChatResponse(sender="bot", message="", type="summary")
+    await websocket.send_json(resp.dict())
+    
+    logging.info(f"Text recieved: {text}")
     loader = RawLoader(text=text)
     
     # The below is just what happens inside VectorstoreIndexCreator
