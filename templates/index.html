@@ -94,13 +94,8 @@
                     var p = messages.lastChild.lastChild;
                     p.innerHTML += data.message;
                 } else if (data.type === "init") {
-                    var header = document.getElementById('header');
-                    header.innerHTML = "Ask a question";
-                    var button = document.getElementById('send');
-                    button.innerHTML = "Send";
-                    button.disabled = false;
                     var p = messages.lastChild.lastChild;
-                    p.innerHTML += data.message;
+                    p.innerHTML += "Index generated";
                 }
             } else {
                 var div = document.createElement('div');

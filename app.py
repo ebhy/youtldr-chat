@@ -85,6 +85,7 @@ async def websocket_endpoint(
             logging.info("websocket disconnect")
             break
         except Exception as e:
+            raise
             logging.error(e)
             resp = ChatResponse(
                 sender="bot",
