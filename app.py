@@ -85,11 +85,10 @@ async def websocket_endpoint(
             logging.info("websocket disconnect")
             break
         except Exception as e:
-            raise
             logging.error(e)
             resp = ChatResponse(
                 sender="bot",
-                message="Sorry, something went wrong. Try again.",
+                message=f"Sorry, something went wrong ({str(e)}) Try again.",
                 type="error",
             )
             await websocket.send_json(resp.dict())
