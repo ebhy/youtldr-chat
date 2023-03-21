@@ -483,7 +483,7 @@ async def get(request: Request):
 async def websocket_endpoint(
     *,
     websocket: WebSocket,
-):
+):    
     await websocket.accept()
     question_handler = QuestionGenCallbackHandler(websocket)
     stream_handler = StreamingLLMCallbackHandler(websocket)
@@ -491,6 +491,7 @@ async def websocket_endpoint(
     
     
     # Generate vectorstore
+    logging.info("Building Vectorstore...")
     loader = RawLoader(text=text)
     
     # The below is just what happens inside VectorstoreIndexCreator
@@ -503,6 +504,7 @@ async def websocket_endpoint(
     # vectorstore = FAISS.from_documents(documents, embeddings)
     
     index = VectorstoreIndexCreator().from_loaders([loader])
+    logging.info("Vectorstore built!")
     vectorstore = index.vectorstore
 
     qa_chain = get_chain(vectorstore, question_handler, stream_handler)
