@@ -32,6 +32,7 @@ def get_chain(
         callback_manager=question_manager,
     )
     streaming_llm = OpenAI(
+        model_name="gpt-3.5-turbo",
         streaming=True,
         callback_manager=stream_manager,
         verbose=True,
