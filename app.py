@@ -15,7 +15,8 @@ from loader import RawLoader
 from langchain.indexes import VectorstoreIndexCreator
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import ConversationalRetrievalChain
-    
+from langchain.embeddings.openai import OpenAIEmbeddings
+
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 vectorstore: Optional[VectorStore] = None
@@ -57,8 +58,9 @@ async def websocket_endpoint(
     # from langchain.embeddings import OpenAIEmbeddings
     # embeddings = OpenAIEmbeddings()
     # vectorstore = FAISS.from_documents(documents, embeddings)
-    
-    index = VectorstoreIndexCreator().from_loaders([loader])
+
+    index = VectorstoreIndexCreator(
+        embedding=OpenAIEmbeddings(model="gpt-3.5-turbo")).from_loaders([loader])
     logging.info("Vectorstore built!")
     vectorstore = index.vectorstore
 
