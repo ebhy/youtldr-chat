@@ -62,15 +62,15 @@ async def websocket_endpoint(
     logging.info("Vectorstore built!")
     vectorstore = index.vectorstore
 
-    # qa_chain = get_chain(vectorstore, question_handler, stream_handler)
+    qa_chain = get_chain(vectorstore, question_handler, stream_handler)
     # Use the below line instead of the above line to enable tracing
     # Ensure `langchain-server` is running
     # qa_chain = get_chain(vectorstore, question_handler, stream_handler, tracing=True)
 
-    qa_chain = ConversationalRetrievalChain.from_llm(
-        llm = ChatOpenAI(temperature=0.0, model_name='gpt-3.5-turbo'),
-        retriever=vectorstore.as_retriever()
-    )
+    # qa_chain = ConversationalRetrievalChain.from_llm(
+    #     llm = ChatOpenAI(temperature=0.0, model_name='gpt-3.5-turbo'),
+    #     retriever=vectorstore.as_retriever()
+    # )
 
     while True:
         try:
