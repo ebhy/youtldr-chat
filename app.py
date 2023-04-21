@@ -13,7 +13,9 @@ from query_data import get_chain
 from schemas import ChatResponse, ChatInput
 from loader import RawLoader
 from langchain.indexes import VectorstoreIndexCreator
-
+from langchain.chat_models import ChatOpenAI
+from langchain.chains import ConversationalRetrievalChain
+    
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 vectorstore: Optional[VectorStore] = None
@@ -46,11 +48,13 @@ async def websocket_endpoint(
     loader = RawLoader(text=text)
     
     # The below is just what happens inside VectorstoreIndexCreator
+    # from langchain.text_splitter import RecursiveCharacterTextSplitter
     # text_splitter = RecursiveCharacterTextSplitter(
     #     chunk_size=1000,
     #     chunk_overlap=200,
     # )
     # documents = text_splitter.split_documents(raw_documents)
+    # from langchain.embeddings import OpenAIEmbeddings
     # embeddings = OpenAIEmbeddings()
     # vectorstore = FAISS.from_documents(documents, embeddings)
     
@@ -58,10 +62,15 @@ async def websocket_endpoint(
     logging.info("Vectorstore built!")
     vectorstore = index.vectorstore
 
-    qa_chain = get_chain(vectorstore, question_handler, stream_handler)
+    # qa_chain = get_chain(vectorstore, question_handler, stream_handler)
     # Use the below line instead of the above line to enable tracing
     # Ensure `langchain-server` is running
     # qa_chain = get_chain(vectorstore, question_handler, stream_handler, tracing=True)
+
+    qa_chain = ConversationalRetrievalChain.from_llm(
+        llm = ChatOpenAI(temperature=0.0, model_name='gpt-3.5-turbo'),
+        retriever=vectorstore.as_retriever()
+    )
 
     while True:
         try:
