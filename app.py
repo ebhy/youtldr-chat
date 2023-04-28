@@ -16,6 +16,7 @@ from langchain.indexes import VectorstoreIndexCreator
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import ConversationalRetrievalChain
 from langchain.embeddings.openai import OpenAIEmbeddings
+from utils import increment_column_today
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
@@ -44,6 +45,9 @@ async def websocket_endpoint(
     text = await websocket.receive_text()
     resp = ChatResponse(sender="bot", message="", type="init")
     await websocket.send_json(resp.dict())
+
+    # At this point do analytics
+    increment_column_today()
 
     logging.info(f"Text recieved: {text}")
     loader = RawLoader(text=text)

@@ -13,3 +13,4 @@ unstructured
 libmagic
 chromadb
 tiktoken
+supabase
