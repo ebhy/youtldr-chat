@@ -47,7 +47,10 @@ async def websocket_endpoint(
     await websocket.send_json(resp.dict())
 
     # At this point do analytics
-    increment_column_today()
+    try:
+        increment_column_today()
+    except:
+        pass
 
     logging.info(f"Text recieved: {text}")
     loader = RawLoader(text=text)
